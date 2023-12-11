@@ -1,5 +1,7 @@
 # Raspberry Pi - Modem Communication Project Timeline
 
+![Gantt Schema](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/12811205-9b87-4c26-bfeb-f14e1e910200)
+
 ## Week 1-2: Modem Communication Library
 
 - ### Week 1:
