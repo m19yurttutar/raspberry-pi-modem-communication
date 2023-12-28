@@ -1,6 +1,8 @@
 import serial
 from serial.tools import list_ports
 
+modem_information = {"vid": 11388, "pid": 293}
+
 
 class Modem:
     def __init__(self, port=None, baudrate=15200, parity=serial.PARITY_NONE):
@@ -8,63 +10,102 @@ class Modem:
             # Automatically finding the serial port
             ports = list_ports.comports()
             for p in ports:
-                if "EG25-G" in p.description:
+                if (p.vid == modem_information["vid"]) and (
+                    p.pid == modem_information["pid"]
+                ):
                     port = p.device
                     break
 
-        self.ser = serial.Serial(port, baudrate, parity=parity)
+        self.serial = serial.Serial(port, baudrate, parity=parity)
 
     def open_connection(self):
+        if not (self.serial and (not self.serial.is_open)):
+            return {
+                "status": "fail",
+                "message": "Serial port is either already open or does not exist.",
+            }
+
         try:
-            self.ser.open()
-            if self.ser.is_open:
-                print("Modem connection opened.")
-        except Exception as e:
-            print("An error occurred while opening the modem connection:", str(e))
+            self.serial.open()
+            return {
+                "status": "success",
+                "message": "The serial port opened successfully.",
+            }
+        except serial.SerialException as e:
+            raise serial.SerialException(
+                f"An error occurred while opening the serial port: {e}"
+            )
 
     def send_command(self, command):
-        if self.ser and self.ser.is_open:
-            try:
-                self.ser.write(command.encode() + b"\r\n")
-            except serial.SerialException as e:
-                print(f"Serial communication error: {e}")
-        else:
-            print("Serial port is not open.")
+        if not (self.serial and self.serial.is_open):
+            return {
+                "status": "fail",
+                "message": "Serial port is either not open or does not exist.",
+            }
+
+        try:
+            self.serial.write(command.encode() + b"\r\n")
+            return {
+                "status": "success",
+                "message": "The command was sent successfully.",
+            }
+        except serial.SerialException as e:
+            raise serial.SerialException(
+                f"An error occurred while sending the command: {e}"
+            )
 
     def read_response(self):
-        if self.ser and self.ser.is_open:
-            try:
-                response = self.ser.read_until(b"OK\r\n").decode().split("\r\n")[1]
-                return response
-            except serial.SerialException as e:
-                print(f"Serial communication error: {e}")
-                return None
-        else:
-            print("Serial port is not open.")
-            return None
+        if not (self.serial and self.serial.is_open):
+            return {
+                "status": "fail",
+                "message": "Serial port is either not open or does not exist.",
+            }
+
+        try:
+            response = b""
+            while True:
+                chunk = self.serial.read(1)
+                response += chunk
+                if response.endswith(b"OK\r\n"):
+                    response = (
+                        response.decode("utf-8")
+                        .replace("OK\r\n", "OK")
+                        .split("\r\r\n")[1]
+                        .split("\r\n\r\n")[0]
+                    )
+                    return {
+                        "status": "success",
+                        "data": response,
+                        "message": "The response was read successfully.",
+                    }
+                elif response.endswith(b"ERROR"):
+                    response = response.decode("utf-8").split("\r\r\n")[1]
+                    return {
+                        "status": "fail",
+                        "data": response,
+                        "message": "Invalid command syntax or format.",
+                    }
+        except serial.SerialException as e:
+            raise serial.SerialException(
+                f"An error occurred while reading the serial port: {e}"
+            )
 
     def close_connection(self):
-        if self.ser and self.ser.is_open:
-            self.ser.close()
-            print("Serial port closed.")
-        else:
-            print("Serial port is not open.")
+        if not (self.serial and self.serial.is_open):
+            return {
+                "status": "fail",
+                "data": None,
+                "message": "Serial port is either not open or does not exist.",
+            }
 
-
-modem = Modem()
-
-AT_COMAMNDS = [
-    "AT",
-    "AT+CGMI",
-    "AT+CGMM",
-    "AT+CPIN?",
-    "AT+CSQ",
-    "AT+CMGL",
-]
-
-for command in AT_COMAMNDS:
-    modem.send_command(command)
-    response = modem.read_response()
-    print(f"Modem response({command}):", response)
-
-modem.close_connection()
+        try:
+            self.serial.close()
+            return {
+                "status": "success",
+                "data": None,
+                "message": "Serial port closed successfully.",
+            }
+        except serial.SerialException as e:
+            raise serial.SerialException(
+                f"An error occurred while closing the serial port: {e}"
+            )
