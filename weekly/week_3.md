@@ -23,7 +23,7 @@ print("Response:", response)
 ```
 
 ```
-    
+![main](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/071fb788-83e1-42b8-b1ee-262ccb7061a7)
 ```
 
 - **Syntax Improvements:** The syntax has been revised in a way that makes the naming more understandable and easier to read.
@@ -52,7 +52,7 @@ def get_last_posted_data():
 ```
 
 ```
-    
+![service](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/4bc19fba-b58d-4984-9091-fea539ec81f6)
 ```
 
 ## Next Steps
