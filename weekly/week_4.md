@@ -32,7 +32,7 @@ def send_http_get():
     print(response["data"])
 ```
 
-
+![Image 1](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/c50ae5f7-66b3-4711-9d59-07c2d646dd55)
 
 ## Next Steps
 
