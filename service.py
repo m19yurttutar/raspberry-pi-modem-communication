@@ -1,34 +1,20 @@
-import requests
 from dotenv import dotenv_values
 from main import Modem
+import time
 
 env = dotenv_values(".env")
 
-
-def post_data(json):
-    url = f"https://webhook.site/{env['API_KEY']}"
-    headers = {"accept": "application/json", "api-key": env["API_KEY"]}
-
-    response = requests.post(url, json=json, headers=headers)
-
-    return response.json()
-
-
-def get_last_posted_data():
-    url = f"https://webhook.site/token/{env['API_KEY']}/request/latest/raw"
-    headers = {"content-type": "application/json"}
-
-    response = requests.get(url, headers=headers)
-
-    return response.json()
-
-
 modem = Modem()
 
-modem.send_command("AT")
-modem_response = modem.read_response()
 
-modem.close_connection()
+# Sends requests based on preset url information(to be improved)
+def send_http_get():
+    modem.send_command("AT+QHTTPGET=80")
+    modem.read_response()
+    time.sleep(3)
+    modem.send_command("AT+QHTTPREAD=80")
+    response = modem.read_response()
+    print(response["data"])
 
-print("POST Response:", post_data(modem_response))
-print("GET Response: ", get_last_posted_data())
+
+send_http_get()
