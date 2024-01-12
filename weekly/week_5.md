@@ -8,7 +8,7 @@ This week, I functionally completed my code that sends HTTP GET and POST request
 
 ### 1. Improvements
 
-- **HTTP GET Requests:** Last week, I sent a request to a URL pre-prepared by the modem for HTTP GET requests and received a response. This week, I updated the functions to take the context ID, URL, and APN as function parameters. In this way, I obtained more dynamic functions. For details visit [http_service.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/service.py)
+- **HTTP GET Requests:** Last week, I sent a request to a URL pre-prepared by the modem for HTTP GET requests and received a response. This week, I updated the functions to take the context ID, URL, and APN as function parameters. In this way, I obtained more dynamic functions. For details visit [http_service.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/http_service.py)
 
 ```
 def send_http_get(pdp_context_id, apn, url):
@@ -36,9 +36,9 @@ def send_http_get(pdp_context_id, apn, url):
 
 ### 2. Functional Development
 
-- **Activating PDP Context:** I added a function to my code that checks whether the PS domain has been added, the PS domain is registered, PDP contexts are enabled, and the maximum PDP contexts have been reached. For details visit [http_service.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/service.py)
+- **Activating PDP Context:** I added a function to my code that checks whether the PS domain has been added, the PS domain is registered, PDP contexts are enabled, and the maximum PDP contexts have been reached. For details visit [http_service.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/http_service.py)
 
-- **HTTP POST Requests:** A function that sends HTTP POST requests has been added to the application. As seen in the code below, before sending the POST request, it is checked whether the PDP context is active or not, and if not, it is activated. For details visit [http_service.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/service.py)
+- **HTTP POST Requests:** A function that sends HTTP POST requests has been added to the application. As seen in the code below, before sending the POST request, it is checked whether the PDP context is active or not, and if not, it is activated. For details visit [http_service.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/http_service.py)
 
 ```
 def send_http_post(pdp_context_id, apn, url, data):
