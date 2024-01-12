@@ -11,12 +11,28 @@ This week, I functionally completed my code that sends HTTP GET and POST request
 - **HTTP GET Requests:** Last week, I sent a request to a URL pre-prepared by the modem for HTTP GET requests and received a response. This week, I updated the functions to take the context ID, URL, and APN as function parameters. In this way, I obtained more dynamic functions. For details visit [http_service.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/service.py)
 
 ```
-    Code
+def send_http_get(pdp_context_id, apn, url):
+    if activate_pdp_context(pdp_context_id, apn):
+        modem.send_command(f"AT+QHTTPURL={len(url)},80")
+
+        time.sleep(1)
+
+        modem.send_command(url)
+        modem.read_response()
+
+        time.sleep(1)
+
+        modem.send_command("AT+QHTTPGET=80")
+        modem.read_response()
+
+        time.sleep(3)
+
+        modem.send_command("AT+QHTTPREAD=80")
+        response = modem.read_response()
+        return response
 ```
 
-```
-    Image
-```
+![Screenshot_1](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/c5ab7498-71f7-4e91-8227-6605183adbaf)
 
 ### 2. Functional Development
 
@@ -25,12 +41,32 @@ This week, I functionally completed my code that sends HTTP GET and POST request
 - **HTTP POST Requests:** A function that sends HTTP POST requests has been added to the application. As seen in the code below, before sending the POST request, it is checked whether the PDP context is active or not, and if not, it is activated. For details visit [http_service.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/service.py)
 
 ```
-    Code
+def send_http_post(pdp_context_id, apn, url, data):
+    if activate_pdp_context(pdp_context_id, apn):
+        modem.send_command(f"AT+QHTTPURL={len(url)},80")
+
+        time.sleep(1)
+
+        modem.send_command(url)
+        modem.read_response()
+
+        time.sleep(1)
+
+        modem.send_command(f"AT+QHTTPPOST={len(data)},80,80")
+
+        time.sleep(1)
+
+        modem.send_command(data)
+        modem.read_response()
+
+        time.sleep(3)
+
+        modem.send_command("AT+QHTTPREAD=80")
+        response = modem.read_response()
+        return response
 ```
 
-```
-    Image
-```
+![Screenshot_2](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/1d4e394d-4fdc-4c9b-8691-5d199ce12058)
 
 ### 3. Researches
 
