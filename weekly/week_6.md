@@ -77,6 +77,8 @@ def receive_message(
     return response
 ```
 
+![image](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/7e619482-c404-4f0e-b833-446bd2880b93)
+
 ## Next Steps
 
 Looking ahead, the focus will be on:
