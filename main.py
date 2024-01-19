@@ -1,5 +1,6 @@
 import serial
 from serial.tools import list_ports
+import time
 
 modem_information = {"vid": 11388, "pid": 293}
 
@@ -54,7 +55,7 @@ class Modem:
                 f"An error occurred while sending the command: {e}"
             )
 
-    def read_response(self):
+    def read_response(self, timeout=5, find=None):
         if not (self.serial and self.serial.is_open):
             return {
                 "status": "fail",
@@ -62,29 +63,40 @@ class Modem:
             }
 
         try:
-            response = b""
-            while True:
-                chunk = self.serial.read(1)
+            response = ""
+            start_time = time.time()
+            while time.time() - start_time < timeout:
+                chunk = self.serial.read().decode("utf-8")
                 response += chunk
-                if response.endswith(b"OK\r\n"):
-                    response = (
-                        response.decode("utf-8")
-                        .replace("OK\r\n", "OK")
-                        .split("\r\r\n")[1]
-                        .split("\r\n\r\n")[0]
-                    )
-                    return {
-                        "status": "success",
-                        "data": response,
-                        "message": "The response was read successfully.",
-                    }
-                elif response.endswith(b"ERROR"):
-                    response = response.decode("utf-8").split("\r\r\n")[1]
-                    return {
-                        "status": "fail",
-                        "data": response,
-                        "message": "Invalid command syntax or format.",
-                    }
+                if not find == None:
+                    if (find in response) and (response.endswith("\r\n")):
+                        response = response.strip()
+                        return {
+                            "status": "success",
+                            "data": response,
+                            "message": "The response was read successfully.",
+                        }
+                else:
+                    if response.endswith("OK\r\n"):
+                        response = response.strip()
+                        return {
+                            "status": "success",
+                            "data": response,
+                            "message": "The response was read successfully.",
+                        }
+                    elif response.endswith("ERROR"):
+                        response = response.strip()
+                        return {
+                            "status": "fail",
+                            "data": response,
+                            "message": "Invalid command syntax or format.",
+                        }
+
+            return {
+                "status": "fail",
+                "data": response,
+                "message": "Timeout occurred while reading serial port.",
+            }
         except serial.SerialException as e:
             raise serial.SerialException(
                 f"An error occurred while reading the serial port: {e}"
