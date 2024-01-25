@@ -8,12 +8,38 @@ The developed Python library enables communication with the modem by sending AT 
 
 ### 2.1. Features
 - **AT Command Handling:** The library allows the transmission of AT commands to the modem and processes the corresponding responses.
+
 - **Serial Port Autodetection:** Extra functionality for automatically detecting the modem's serial port is implemented.
+
+### 2.2. Usage
+```
+from main import Modem
+
+# Automatic port detection is available
+modem = Modem()
+
+# Open the serial port
+open_response = modem.open_connection()
+
+# Output the given command as a byte array over the serial port
+write_reponse = modem.send_command(command)
+
+# Reading the byte array on the serial port by converting it to string
+read_response = modem.read_response(timeout, find)
+
+# Close the serial port
+close_response = modem.close_conection()
+```
 
 ## 3. HTTP Client
 A sample code was developed to send HTTP GET and POST requests to [webhook.site](http://webhook.site) using the previously implemented modem communication library. For details visit [http_client.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/http_client.py).
 
-### 3.1. Usage
+### 3.1. Features
+- **PDP Context Activation:** HTTP Client contains a function that checks whether PDP content is enabled and if not, enables PDP content.
+
+- **HTTP GET and POST Requests:** HTTP Client sends HTTP GET and POST requests to the entered url and reads the incoming response successfully.
+
+### 3.2. Usage
 In addition to the code shown as an example below, the HTTP client also contains a function that queries whether the PDP context is active or not and activates it if it is not, and functions for the verifications required to activate the PDP context.
 
 ```
@@ -23,7 +49,6 @@ from http_client import ModemHTTPClient
 modem = Modem() # Automatic port detection is available
 http_client = ModemHTTPClient()
 
-# The response is a dictionary with `success`, `data`, and `message` key valu pairs.
 get_response = http_client.send_http_get(context_id, apn, url)
 
 post_response = http_client.send_http_post(context_id, apn, url, data)
@@ -32,7 +57,12 @@ post_response = http_client.send_http_post(context_id, apn, url, data)
 ## 4. MQTT Client
 Another sample code was developed to send MQTT messages to a topic on the [HiveMQ](https://www.hivemq.com/mqtt/public-mqtt-broker) broker and subscribe to the same topic to read messages using the modem communication library. For details visit [mqtt_client.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/mqtt_client.py).
 
-### 4.1. Usage
+### 4.1. Features
+- **Main MQTT Functions:** There are two main functions in MQTT Client. These are the subscribe function, which allows subscribing to the mqtt broker, and the publish functions, which allow a message to be published on a topic.
+
+- **Auxiliary MQTT Functions:** Other functions such as open, connect, and disconnect, which are not included in the main functions, help perform main functions such as publishing messages and subscribing.
+
+### 4.2. Usage
 The MQTT client, like the HTTP client, includes functions in addition to the code shown as an example below. These are various functions that perform the functions of connecting to the network, connecting to the server, disconnecting from the server, subscribing to a topic, publishing to the topic, and receiving from the subscribed topic.
 
 ```
@@ -42,7 +72,6 @@ from mqtt_client import ModemMQTTClient
 modem = Modem() # Automatic port detection is available
 mqtt_client = ModemMQTTClient()
 
-# The response is a dictionary with `success`, `data`, and `message` key valu pairs.
 receive_message_response = mqtt_client.receive_message(
     client_idx,
     hostname,
