@@ -31,6 +31,8 @@ read_response = modem.read_response(timeout, find)
 close_response = modem.close_conection()
 ```
 
+![modem](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/a3372a17-6d5c-42cf-89bb-9a46a0a01bea)
+
 ## 3. HTTP Client
 A sample code was developed to send HTTP GET and POST requests to [webhook.site](http://webhook.site) using the previously implemented modem communication library. For details visit [http_client.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/http_client.py).
 
@@ -53,6 +55,10 @@ get_response = http_client.send_http_get(context_id, apn, url)
 
 post_response = http_client.send_http_post(context_id, apn, url, data)
 ```
+
+![http_client](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/690549e7-6683-4352-a209-eae97470f5e0)
+
+![http_client](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/69fe50a6-43c1-4588-b957-1928ad681fbb)
 
 ## 4. MQTT Client
 Another sample code was developed to send MQTT messages to a topic on the [HiveMQ](https://www.hivemq.com/mqtt/public-mqtt-broker) broker and subscribe to the same topic to read messages using the modem communication library. For details visit [mqtt_client.py](https://github.com/m19yurttutar/raspberry-pi-modem-communication/blob/master/mqtt_client.py).
@@ -98,6 +104,8 @@ publish_message_reponse = mqtt_client.publish_message(
 )
 ```
 
+![mqtt_client](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/7a3f8994-c299-461c-bebe-e6f0d2dc69a9)
+
 ## 5. Raspberry Pi Internet Connectivity
 By using the three different protocols mentioned, Raspberry Pi was successfully enabled to access the internet via modem: PPP, QMI/RMNET and ECM.
 
@@ -106,15 +114,15 @@ The connection speeds of protocols were measured separately using the speedtest-
 
 #### 5.1.1 PPP (Point-to-Point Protocol)
 
-
+![PPP](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/0bdf8e31-95db-4363-81d6-8f0113b93674)
 
 #### 5.1.2 QMI (Quelcom MSM Interface)
 
-
+![QMI](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/d2c87045-f05c-446e-99e7-ae6f2edf6ee2)
 
 #### 5.1.3 ECM (Ethernet Control Model)
 
-
+![ECM](https://github.com/m19yurttutar/raspberry-pi-modem-communication/assets/76749251/5136bbf5-1dab-482a-bb0c-fd789230b842)
 
 ### 5.2 Comparison of Protocols
 - **PPP:** PPP's performance typically depends on the type of connection and the physical environment. For example, it provides low bandwidth in dial-up connections but can achieve higher performance in DSL or faster connections. PPP can support various types of connections but is more suitable for point-to-point connections.
