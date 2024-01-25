@@ -54,14 +54,21 @@ def http_demo_3(context_id, apn, url):
     print(f"\nGET RESPONSE DATA:\n{response['data']}")
 
 
-# http_demo_3(1, "super", f"https://webhook.site/token/{env['API_KEY']}/request/latest/raw")
+# http_demo_3(
+#     1, "super", f"https://webhook.site/token/{env['API_KEY']}/request/latest/raw"
+# )
 
 
 # MQTT DEMOS
 mqtt_client = ModemMQTTClient(modem)
 
-def mqtt_demo_1(client_idx, hostname, port, client_id, msgid, qos, retain, topic, message):
-    response = mqtt_client.publish_message(client_idx, hostname, port, client_id, msgid, qos, retain, topic, message)
+
+def mqtt_demo_1(
+    client_idx, hostname, port, client_id, msgid, qos, retain, topic, message
+):
+    response = mqtt_client.publish_message(
+        client_idx, hostname, port, client_id, msgid, qos, retain, topic, message
+    )
     print(f"\nPUBLISH RESPONSE:\n{response}")
     print(f"\nPUBLISH RESPONSE DATA:\n{response['data']}")
 
@@ -69,10 +76,44 @@ def mqtt_demo_1(client_idx, hostname, port, client_id, msgid, qos, retain, topic
     print(f"\nDISCONNECT RESPONSE:\n{response}")
     print(f"\nDISCONNECT RESPONSE DATA:\n{response['data']}")
 
-# mqtt_demo_1(1, "broker.hivemq.com", 1883, "clientExample", 0, 0, 0, "topic/pub", "Hello Quectel!!!")
 
-def mqtt_demo_2(client_idx, hostname, port, client_id, sub_msgid, pub_msgid, qos, retain, topic, message):
-    response = mqtt_client.receive_message(client_idx, hostname, port, client_id, sub_msgid, pub_msgid, qos, retain, topic, message)
+mqtt_demo_1(
+    1,
+    "broker.hivemq.com",
+    1883,
+    "clientExample",
+    0,
+    0,
+    0,
+    "topic/pub",
+    "Hello Quectel!!!",
+)
+
+
+def mqtt_demo_2(
+    client_idx,
+    hostname,
+    port,
+    client_id,
+    sub_msgid,
+    pub_msgid,
+    qos,
+    retain,
+    topic,
+    message,
+):
+    response = mqtt_client.receive_message(
+        client_idx,
+        hostname,
+        port,
+        client_id,
+        sub_msgid,
+        pub_msgid,
+        qos,
+        retain,
+        topic,
+        message,
+    )
     print(f"\nRECEIVE RESPONSE:\n{response}")
     print(f"\nRECEIVE RESPONSE DATA:\n{response['data']}")
 
@@ -81,4 +122,15 @@ def mqtt_demo_2(client_idx, hostname, port, client_id, sub_msgid, pub_msgid, qos
     print(f"\nDISCONNECT RESPONSE DATA:\n{response['data']}")
 
 
-mqtt_demo_2(1, "broker.hivemq.com", 1883, "clientExample", 1, 0, 0, 0, "topic/pub", "Hello Quectel!")
+# mqtt_demo_2(
+#     1,
+#     "broker.hivemq.com",
+#     1883,
+#     "clientExample",
+#     1,
+#     0,
+#     0,
+#     0,
+#     "topic/pub",
+#     "Hello Quectel!",
+# )
